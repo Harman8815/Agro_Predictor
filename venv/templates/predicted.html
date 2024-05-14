@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop</title>
+    <link rel="stylesheet" href="/static/predicted_style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+        integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="/static/script.js"></script>
+</head>
+
+<body>
+    <section class="head">
+        <div class="navbar">
+            <div class="logo flex-item grow">
+                <h1>Argo Predictor</h1>
+            </div>
+            <div id="col" class="col-remove"></div>
+            <nav class="responsive flex-item" id="n">
+                <li id="curr"><a href="./index.html">Home</a></li>
+                <li><a href="./crop_finder.html">Crop Predictor</a></li>
+                <li><a href="#">Price Predictor</a></li>
+                <li><a href="#">About</a></li>
+            </nav>
+            <a href="javascript:void(0);" class="icon flex-item" style="font-size: 1.5rem"
+                onclick="myFunction()">&#9776;</a>
+        </div>
+
+        <div class="main">
+            <div class="imghome">
+                <img id="myImage" src="{{img_src}}" alt="Image">
+            </div>
+            <div>
+                <h2 id="name">{{predicted_value}}</h2>
+
+                <div class="info">
+                    <p class="content">{{crop_info['content']}}</p>
+                    <div class="crop-info">
+                        <div class="row row1">
+                            <h3 class="heading">ph</h3>
+                            <p class="values">{{crop_info['crop-info']['row1']['values']}}</p>
+                        </div>
+                        <div class="row row2">
+                            <h3 class="heading">rain</h3>
+                            <p class="values">{{crop_info['crop-info']['row2']['values']}}</p>
+                        </div>
+                        <div class="row row3">
+                            <h3 class="heading">k</h3>
+                            <p class="values">{{crop_info['crop-info']['row3']['values']}}</p>
+                        </div>
+                        <div class="row row4">
+                            <h3 class="heading">p</h3>
+                            <p class="values">{{crop_info['crop-info']['row4']['values']}}</p>
+                        </div>
+                        <div class="row row5">
+                            <h3 class="heading">soil type</h3>
+                            <p class="values">{{crop_info['crop-info']['row5']['values']}}</p>
+                        </div>
+                        <div class="row row6">
+                            <h3 class="heading">crop timeline</h3>
+                            <p class="values">{{crop_info['crop-info']['row6']['values']}}</p>
+                        </div>
+                        <div class="row row7">
+                            <h3 class="heading">Sowing Method:</h3>
+                            <p class="values">{{crop_info['crop-info']['row7']['values']}}</p>
+                        </div>
+                        <div class="row row8">
+                            <h3 class="heading">Growth Habit</h3>
+                            <p class="values">{{crop_info['crop-info']['row8']['values']}}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <button onclick="x()">button</button> -->
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 Agro Predictor. All rights reserved.</p>
+    </footer>
+</body>
+<script>
+    function myFunction() {
+        var x = document.getElementById("n");
+        if (x.className === "navigation") {
+            animateOutNav();
+            gsap.to(".navigation", {
+                onComplete: function () {
+                    x.className = "responsive";
+                },
+            });
+        } else {
+            x.className = "navigation";
+            animateInNav();
+        }
+
+        var y = document.getElementById("col");
+        if (y.className === "col-show") {
+            y.className = "col-remove";
+        } else {
+            y.className = "col-show";
+        }
+    }
+
+    function animateInNav() {
+        gsap.set(".navigation li", { opacity: 1 });
+        gsap.from(".navigation li", {
+            X: "+=100",
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out",
+        });
+    }
+
+    function animateOutNav() {
+        gsap.set(".navigation li", { opacity: 1 });
+        gsap.to(".navigation li", {
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out",
+        });
+    }
+    const names = ['Rice', 'Maize', 'Chickpea', 'Kidneybeans', 'Pigeonpeas', 'Mothbeans', 'Mungbean', 'Blackgram', 'Lentil', 'Pomegranate', 'Banana', 'Mango', 'Grapes', 'Watermelon', 'Muskmelon', 'Apple', 'Orange', 'Papaya', 'Coconut', 'Cotton', 'Jute', 'Coffee'];
+    const add = ['./img/rice.webp', './img/maize.webp', './img/chickpea.webp', './img/kidneybeans.webp', './img/pigeonpeas.jpg', './img/mothbeans.webp', './img/mungbeans.webp', './img/blackgram.webp', './img/lentil.webp', './img/pomegranate.webp', './img/banana.webp', './img/mango.webp', './img/grapes.webp', './img/watermelon.webp', './img/muskmelon.webp', './img/apple.webp', './img/orange.jpg', './img/papaya.webp', './img/coconut.webp', './img/cotton.webp', './img/jute.jpg', './img/coffee.webp'];
+    let val = 0;
+    const image = document.getElementById("image");
+    const y = document.getElementById("name");
+
+    function x() {
+        val++;
+        if (val >= names.length) val = 0;
+        image.src = add[val];
+        y.innerHTML = names[val];
+        updateData(val);
+    }
+
+    function updateData(index) {
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const dataIndex = index % data.length;
+                const content = data[dataIndex].content;
+                const cropInfo = data[dataIndex]['crop-info'];
+
+                document.querySelector('.content').textContent = content;
+
+                for (let i = 1; i <= Object.keys(cropInfo).length; i++) {
+                    const rowKey = 'row' + i;
+                    const heading = cropInfo[rowKey].heading;
+                    const values = cropInfo[rowKey].values;
+                    document.querySelector(`.row${i} .heading`).textContent = heading;
+                    document.querySelector(`.row${i} .values`).textContent = values;
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    
+</script>
+
+</html>
